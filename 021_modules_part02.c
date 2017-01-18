@@ -7,34 +7,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct _intarray intarray;
 
-void intarray_print_positive_values(int* tab, int len);
-int intarray_search(int* tab, int len, int n);
-int intarray_nb_occurences(int* tab, int len, int n);
+struct _intarray {
+	int* data;
+	int len;
+};
+
+intarray intarray_create(int len);
+void intarray_print_positive_values(intarray tab);
+int intarray_search(intarray tab, int n);
+int intarray_nb_occurences(intarray tab, int n);
+void intarray_debug(intarray tab);
 
 
-void intarray_print_positive_values(int* tab, int len)
+intarray intarray_create(int len)
+{
+	intarray tab;
+	int i;
+	tab.len = len;
+	tab.data = malloc(len * sizeof(int));
+
+	for(i=0; i<len; i++) {
+		tab.data[i] = 0;
+	}
+
+	return tab;
+}
+
+void intarray_print_positive_values(intarray tab)
 {
 	int i;
 	printf("[");
-	for (i=0; i<len; i++)
+	for (i=0; i<tab.len-1; i++)
 	{
-		if (tab[i] >= 0)
-			printf(" %d", tab[i]);
+		if (tab.data[i] >= 0)
+			printf("%d ", tab.data[i]);
 	}
-	printf(" ]");
-	printf("\n");
+	if (tab.data[tab.len-1] >= 0)
+			printf("%d", tab.data[tab.len-1]);
+	printf("]");
 }
 
 
-int intarray_search(int* tab, int len, int n)
+int intarray_search(intarray tab, int n)
 {
 	int trouve = 0;
 	int i = 0;
 
-	while (!trouve && i < len)
+	while (!trouve && i < tab.len)
 	{
-		if (tab[i] == n)
+		if (tab.data[i] == n)
 			trouve = 1;
 		i++;
 	}
@@ -42,64 +65,52 @@ int intarray_search(int* tab, int len, int n)
 	return trouve;
 }
 
-int intarray_nb_occurences(int* tab, int len, int n)
+int intarray_nb_occurences(intarray tab, int n)
 {	
 	int i;
 	int nb = 0;
 
-	for (i=0; i<len; i++)
+	for (i=0; i<tab.len; i++)
 	{
-		if (tab[i] == n)
+		if (tab.data[i] == n)
 			nb++;
 	}
 
 	return nb;
 }
 
-void intarray_debug(int* T, int len)
+void intarray_debug(intarray tab)
 {
 	int i;
 	printf("[");
-	for (i=0; i<len-1; i++)
-		printf("%d ", T[i]);
-	printf("%d", T[len-1]);
+	for (i=0; i<tab.len-1; i++)
+		printf("%d ", tab.data[i]);
+	printf("%d", tab.data[tab.len-1]);
 	printf("]");
-	printf("\n");
 }
 
 int main(int argc, char *argv[])
 {
-	int n;
+	intarray tab = intarray_create(10);
 
-	printf("Combien de cases voulez-vous remplir ? ");
-	scanf("%d", &n);
+	intarray_debug(tab);
+	printf("\n");
 
-	int i;
-	int* toto = malloc(n * sizeof(int));
-	
-	for (i=0; i<n; i++)
-	{
-		printf("Veuillez saisir la valeur numéro %d : ", i);
-		scanf("%d", &toto[i]);
-	}
+	tab.data[0] = -4;
+	tab.data[5] = 20;
+	tab.data[7] = 20;
 
-	intarray_debug(toto, n);
+	intarray_debug(tab);
+	printf("\n");
 
-	intarray_print_positive_values(toto, n);
+	intarray_print_positive_values(tab);
+	printf("\n");
+	printf("%d", intarray_search(tab, 20));
+	printf("\n");
+	printf("%d", intarray_nb_occurences(tab, 20));
+	printf("\n");
 
-
-	int search;
-	int trouve;
-	printf("Entrez une valeur à chercher ? ");
-	scanf("%d", &search);
-
-	trouve = intarray_search(toto, n, search);
-	if (trouve == 1)
-		printf("La valeur %d a été trouvée %d fois.\n", search, intarray_nb_occurences(toto, n, search));
-	else 
-		printf("La valeur %d n'a pas été trouvée.\n", search);
-
-	free(toto);
+	free(tab.data);
 
 	return EXIT_SUCCESS;
 }
