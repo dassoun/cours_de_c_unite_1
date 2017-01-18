@@ -42,6 +42,20 @@ int intarray_search(int* tab, int len, int n)
 	return trouve;
 }
 
+int intarray_nb_occurences(int* tab, int len, int n)
+{	
+	int i;
+	int nb = 0;
+
+	for (i=0; i<len; i++)
+	{
+		if (tab[i] == n)
+			nb++;
+	}
+
+	return nb;
+}
+
 void intarray_debug(int* T, int len)
 {
 	int i;
@@ -81,7 +95,7 @@ int main(int argc, char *argv[])
 
 	trouve = intarray_search(toto, n, search);
 	if (trouve == 1)
-		printf("La valeur %d a été trouvée.\n", search);
+		printf("La valeur %d a été trouvée %d fois.\n", search, intarray_nb_occurences(toto, n, search));
 	else 
 		printf("La valeur %d n'a pas été trouvée.\n", search);
 
