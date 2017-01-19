@@ -42,3 +42,4 @@ void int_swap(int* n, int* m);
 int intarray_sum(intarray tab);
 float intarray_average(intarray tab);
 float intarray_median(intarray tab);
+intarray intarray_clone(intarray tab);

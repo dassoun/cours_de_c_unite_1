@@ -11,11 +11,12 @@
 
 int main(int argc, char *argv[])
 {
-	intarray tab1 = intarray_create(2);
+	intarray tab1 = intarray_create(3);
 	intarray tab2 = intarray_create(4);
 
 	intarray_set(tab1, 0, 7);
 	intarray_set(tab1, 1, 6);
+	intarray_set(tab1, 2, 45);
 
 	intarray_set(tab2, 0, 1);
 	intarray_set(tab2, 1, 2);
@@ -53,10 +54,10 @@ int main(int argc, char *argv[])
 	intarray_debug(tab3);
 	printf("\n");
 
-	intarray_sort1(tab3);
+/*	intarray_sort1(tab3);
 	printf("Voilà le tableau trié : ");
 	intarray_debug(tab3);
-	printf("\n");
+	printf("\n");*/
 
 	printf("Somme du tableau = %d", intarray_sum(tab3));
 	printf("\n");
@@ -67,6 +68,8 @@ int main(int argc, char *argv[])
 	printf("Mediane du tableau = %f", intarray_median(tab3));
 	printf("\n");
 
+	intarray_debug(tab3);
+	printf("\n");
 
 	intarray_destroy(tab1);
 	intarray_destroy(tab2);

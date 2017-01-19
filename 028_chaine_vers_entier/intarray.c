@@ -234,6 +234,9 @@ int intarray_sum(intarray tab)
 	int i;
 	int res = 0;
 
+	if (tab.len <= 0)
+		printf("intarray_sum : tableau de longueur négative ou nulle.\n");
+	
 	for (i=0; i<tab.len; i++)
 	{
 		res += tab.data[i];
@@ -246,6 +249,12 @@ float intarray_average(intarray tab)
 {
 	float res = 0.0;
 
+	if (tab.len <= 0)
+	{
+		printf("intarray_average : tableau de longueur négative ou nulle.\n");
+		return -1.0;
+	}
+	
 	if (tab.len > 0)
 	{
 		res = (float) intarray_sum(tab) / tab.len;
@@ -256,19 +265,43 @@ float intarray_average(intarray tab)
 
 float intarray_median(intarray tab)
 {
+	if (tab.len <= 0)
+	{
+		printf("intarray_average : tableau de longueur négative ou nulle.\n");
+		return -1.0;
+	}
+	
 	float res; 
 
-	intarray_sort1(tab);
+	intarray copy = intarray_clone(tab);
 
-	if (tab.len % 2 > 0)
+	intarray_sort1(copy);
+
+	if (copy.len % 2 > 0)
 	{	
-		res = tab.data[((tab.len + 1) / 2) - 1];
+		res = copy.data[((copy.len - 1) / 2)];
 	} else {
-		int indiceInf = (tab.len / 2) - 1;
-		int indiceSup = (tab.len / 2);
+		int indiceInf = (copy.len - 1) / 2;
+		int indiceSup = (copy.len / 2);
 
-		res = (float) (tab.data[indiceInf] + tab.data[indiceSup]) / 2;
+		res = (float) (copy.data[indiceInf] + copy.data[indiceSup]) / 2;
 	}
 
+	intarray_destroy(copy);
+
 	return res;
+}
+
+intarray intarray_clone(intarray tab)
+{
+	int i;
+
+	intarray copy = intarray_create(tab.len);
+
+	for (i=0; i<tab.len; i++)
+	{
+		intarray_set(copy, i, intarray_get(tab, i));
+	}
+
+	return copy;
 }
