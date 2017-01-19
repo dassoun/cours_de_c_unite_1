@@ -1,0 +1,20 @@
+all : stats.exe test_array.exe
+	echo "Compilation terminée"
+
+stats.exe : stats.o intarray.o tools.o
+	gcc stats.o intarray.o tools.o -o stats.exe
+
+test_arry.exe : test_array.o intarray.o tools.o
+	gcc test_array.o intarray.o tools.o -o test_array.exe
+
+intarray.o : intarray.c intarray.h
+	gcc -c intarray.c
+
+test_array.o : test_array.c intarray.h tools.h
+	gcc -c test_array.c
+
+tools.o : tools.c tools.h
+	gcc -c tools.c
+
+stats.o : stats.c intarray.h tools.h
+	gcc -c stats.c
