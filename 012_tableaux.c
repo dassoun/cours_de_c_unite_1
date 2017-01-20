@@ -19,24 +19,14 @@ int main(int argc, char *argv[])
 	}
 
 	printf("Vous avez entré, dans cet ordre, les nombres : ");
-	for (i=0; i<=9; i++)
-	{
-		if (i < 9)
-			printf("%d, ", tab[i]);
-		else
-			printf("%d.", tab[i]);
-		
-	}
+	for (i=0; i<9; i++)
+		printf("%d, ", tab[i]);
+	printf("%d.\n", tab[9]);
 
 	printf("Vous avez entré, dans l'ordre inverse, les nombres : ");
-	for (i=9; i>=0; i--)
-	{
-		if (i > 0)
-			printf("%d, ", tab[i]);
-		else
-			printf("%d.", tab[i]);
-		
-	}
+	for (i=9; i>0; i--)
+		printf("%d, ", tab[i]);
+	printf("%d.", tab[0]);
 
 	return EXIT_SUCCESS;
 }

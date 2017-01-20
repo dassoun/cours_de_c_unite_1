@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "intarray.h"
+#include "tools.h"
 
 /* Corps des fonctions manipulant des intarray */
 intarray intarray_create(int len)
@@ -220,13 +221,6 @@ void intarray_sort1(intarray tab)
 		//intarray_swap(&(tab.data[i]), &(tab.data[indiceMin]));
 		int_swap(tab.data + i, tab.data + indiceMin);
 	}
-}
-
-void int_swap(int* n, int* m)
-{
-	int tmp = *m;
-	*m = *n;
-	*n = tmp;
 }
 
 int intarray_sum(intarray tab)

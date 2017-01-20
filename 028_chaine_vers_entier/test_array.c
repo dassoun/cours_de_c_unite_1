@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "intarray.h"
+#include "tools.h"
 
 int main(int argc, char *argv[])
 {
@@ -74,6 +75,16 @@ int main(int argc, char *argv[])
 	intarray_destroy(tab1);
 	intarray_destroy(tab2);
 	intarray_destroy(tab3);
+
+	/*
+	*	test tools
+	*/
+	char* str = "00000";
+
+	printf("\n");
+	printf("======================\n");
+	printf("Test tools.c :\n");
+    printf("La chaine %s = l'entier %d\n", str, string_to_int(str));
 
 	return EXIT_SUCCESS;
 }

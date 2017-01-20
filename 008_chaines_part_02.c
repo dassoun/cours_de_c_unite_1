@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
 	char* toto = "Bonjour les gens";
 	int i = 0;
 
-	while (*(toto + i) != '\0')
+	while (toto[i] != '\0')
 	{
-		printf("%c ", *(toto + i));
+		printf("%c ", toto[i]);
 		i++;
 	}
 

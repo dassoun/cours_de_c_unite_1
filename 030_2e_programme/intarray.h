@@ -37,7 +37,6 @@ int intarray_get_index_of_max(intarray tab);
 int intarray_get_index_of_max_from(intarray tab, int n);
 /* Tri par sélection du minimum */
 void intarray_sort1(intarray tab);
-void int_swap(int* n, int* m);
 
 int intarray_sum(intarray tab);
 float intarray_average(intarray tab);

@@ -48,11 +48,9 @@ int safe_string_to_int(char* str, int* ok)
 	return res;
 }
 
-int main(int argc, char *argv[]) 
+void int_swap(int* n, int* m)
 {
-    char* str = "00000";
-
-    printf("%d\n", string_to_int(str));
-    
-    return (EXIT_SUCCESS);
+	int tmp = *m;
+	*m = *n;
+	*n = tmp;
 }

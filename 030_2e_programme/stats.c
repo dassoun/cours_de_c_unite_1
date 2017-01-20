@@ -24,6 +24,14 @@ int main(int argc, char* argv[])
 			printf("%s n'est pas un nombre, on l'ignore\n", argv[i]);
 	}
 
+	if (tab.len == 0)
+	{
+		printf("Aucun nombre. Statistiques impossibles.");
+		intarray_destroy(tab);
+
+		return EXIT_SUCCESS;
+	}
+
 	/*
 		bidouillage pourri
 		on modifiera ce code avec nos tableaux dynamiques

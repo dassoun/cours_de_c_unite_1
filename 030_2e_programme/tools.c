@@ -50,3 +50,10 @@ int safe_string_to_int(char* str, int* ok)
 
 	return res;
 }
+
+void int_swap(int* n, int* m)
+{
+	int tmp = *m;
+	*m = *n;
+	*n = tmp;
+}

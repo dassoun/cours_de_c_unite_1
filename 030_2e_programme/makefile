@@ -4,7 +4,7 @@ all : stats.exe test_array.exe
 stats.exe : stats.o intarray.o tools.o
 	gcc stats.o intarray.o tools.o -o stats.exe
 
-test_arry.exe : test_array.o intarray.o tools.o
+test_array.exe : test_array.o intarray.o tools.o
 	gcc test_array.o intarray.o tools.o -o test_array.exe
 
 intarray.o : intarray.c intarray.h

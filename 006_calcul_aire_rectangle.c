@@ -7,29 +7,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int lire_dimension(char* nom)
+{
+	int dimension;
+
+	printf("Entrez %s du rectangle : ", nom);
+	scanf("%d", &dimension);
+
+	while (dimension <= 0)
+	{
+		printf("Anomalie détectée : %s doit être strictement positive.\n", nom);
+		printf("Entrez la %s du rectangle : ", nom);
+		scanf("%d", &dimension);
+	}
+
+	return dimension;
+}
+
 int main(int argc, char *argv[]) 
 {
 	int L, l;
 
-	printf("Entrez la longueur du rectangle : ");
-	scanf("%d", &L);
+	L = lire_dimension("la longueur");
 
-	while (L <= 0)
-	{
-		printf("Anomalie détectée : la longueur doit être strictement positive.\n");
-		printf("Entrez la longueur du rectangle : ");
-		scanf("%d", &L);
-	}
-
-	printf("Entrez la largeur du rectangle : ");
-	scanf("%d", &l);
-
-	while (l <= 0)
-	{
-		printf("Anomalie détectée : la largeur doit être strictement positive.\n");
-		printf("Entrez la largeur du rectangle : ");
-		scanf("%d", &l);
-	}
+	l = lire_dimension("la largeur");
 
 	if (l > L)
 		printf("Anomalie détectée : la largeur %d est strictement supérieure à la longeur %d.\n", l, L);
