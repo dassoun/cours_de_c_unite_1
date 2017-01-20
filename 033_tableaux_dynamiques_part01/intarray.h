@@ -1,4 +1,5 @@
-typedef struct _intarray intarray;
+typedef struct _intarray* intarray;
+typedef struct _intarray  S_intarray;
 
 struct _intarray {
 	int* data;
@@ -8,10 +9,12 @@ struct _intarray {
 
 /* Prototypes des fonctions manipulant des intarray */
 intarray intarray_create(int len);
+intarray empty_intarray_create(int alloc);
+void intarray_create_aux(intarray tab);
 void intarray_destroy(intarray tab);
 int intarray_get(intarray tab, int index);
 void intarray_set(intarray tab, int index, int value);
-void intarray_add(intarray* tab, int value);
+void intarray_add(intarray tab, int value);
 /*
 	Déplace un seul élément (très rapide).
 	Attention : modifie l'ordre des éléments de tab.
@@ -19,12 +22,12 @@ void intarray_add(intarray* tab, int value);
 	Si on souhaite que l'ordre reste inchangé,
 	il faut appler la méthode intarray_delete
 */
-void unsorted_intarray_delete(intarray* tab, int index);
+void unsorted_intarray_delete(intarray tab, int index);
 /*
 	Déplace jusqu'à N éléments (dans le pire des cas),
 	N étant la taille du tableau
 */
-void intarray_delete(intarray* tab, int index);
+void intarray_delete(intarray tab, int index);
 
 int intarray_length(intarray tab);
 void intarray_print_positive_values(intarray tab);

@@ -7,65 +7,93 @@
 /* Corps des fonctions manipulant des intarray */
 intarray intarray_create(int len)
 {
-	intarray tab;
-	int i;
-	tab.len = len;
-	tab.alloc = len;
-	tab.data = malloc(len * sizeof(int));
+	intarray tab = malloc(sizeof(S_intarray));
+	
+	tab->len = len;
+	tab->alloc = len;
 
-	for(i=0; i<len; i++) {
-		tab.data[i] = 0;
-	}
+	intarray_create_aux(tab);
 
 	return tab;
 }
 
+intarray empty_intarray_create(int alloc)
+{
+	intarray tab = malloc(sizeof(S_intarray));
+
+	tab->len = 0;
+	tab->alloc = alloc;
+	
+	intarray_create_aux(tab);
+
+	return tab;
+}
+
+void intarray_create_aux(intarray tab)
+{
+	if (tab->alloc <= 0)
+	{
+		tab->alloc = 4;
+
+		printf("intarray_create_aux : taille allouée <= 0.\n");
+		printf("Nous allouons %d à la place.\n", tab->alloc);
+	}
+	
+	tab->data = malloc(tab->alloc * sizeof(int));
+
+	int i;
+
+	for(i=0; i<tab->alloc; i++)
+		tab->data[i] = 0;
+}
+
 void intarray_destroy(intarray tab)
 {
-	free(tab.data);
+	free(tab->data);
+	free(tab);
 }
 
 int intarray_get(intarray tab, int index)
 {
-	if ((index < 0) || (index >= tab.len))
+	if ((index < 0) || (index >= tab->len))
 	{
 		printf("intarray_get : L'index %d est invalide\n", index);
-		printf("Les valeurs valides sont entre 0 et %d\n", tab.len-1);
+		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
 		return -1;
 	}
 
-	return tab.data[index];
+	return tab->data[index];
 }
 
 void intarray_set(intarray tab, int index, int value)
 {
-	if ((index < 0) || (index >= tab.len))
+	if ((index < 0) || (index >= tab->len))
 	{
 		printf("intarray_get : L'index %d est invalide\n", index);
-		printf("Les valeurs valides sont entre 0 et %d\n", tab.len-1);
+		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
 
 		return;
 	}
 
-	tab.data[index] = value;
+	tab->data[index] = value;
 }
 
 int intarray_length(intarray tab)
 {
-	return tab.len;
+	return tab->len;
 }
 
 void intarray_print_positive_values(intarray tab)
 {
 	int i;
 	printf("[");
-	for (i=0; i<tab.len-1; i++)
+	for (i=0; i<tab->len-1; i++)
 	{
-		if (tab.data[i] >= 0)
-			printf("%d ", tab.data[i]);
+		if (tab->data[i] >= 0)
+			printf("%d ", tab->data[i]);
 	}
-	if (tab.data[tab.len-1] >= 0)
-			printf("%d", tab.data[tab.len-1]);
+	if (tab->data[tab->len-1] >= 0)
+			printf("%d", tab->data[tab->len-1]);
 	printf("]");
 }
 
@@ -75,9 +103,9 @@ int intarray_search(intarray tab, int n)
 	int trouve = 0;
 	int i = 0;
 
-	while (!trouve && i < tab.len)
+	while (!trouve && i < tab->len)
 	{
-		if (tab.data[i] == n)
+		if (tab->data[i] == n)
 			trouve = 1;
 		i++;
 	}
@@ -90,9 +118,9 @@ int intarray_nb_occurences(intarray tab, int n)
 	int i;
 	int nb = 0;
 
-	for (i=0; i<tab.len; i++)
+	for (i=0; i<tab->len; i++)
 	{
-		if (tab.data[i] == n)
+		if (tab->data[i] == n)
 			nb++;
 	}
 
@@ -103,26 +131,27 @@ void intarray_debug(intarray tab)
 {
 	int i;
 	printf("[");
-	for (i=0; i<tab.len-1; i++)
-		printf("%d ", tab.data[i]);
-	printf("%d", tab.data[tab.len-1]);
+	for (i=0; i<tab->len-1; i++)
+		printf("%d ", tab->data[i]);
+	if (tab->len > 0)
+		printf("%d", tab->data[tab->len-1]);
 	printf("]");
 }
 
 intarray intarray_concat(intarray t1, intarray t2)
 {
-	int n = t1.len + t2.len;
+	int n = t1->len + t2->len;
 
 	intarray tab = intarray_create(n);
 
 	int i;
-	for(i=0; i<t1.len; i++)
+	for(i=0; i<t1->len; i++)
 	{
-		tab.data[i] = t1.data[i];
+		tab->data[i] = t1->data[i];
 	}
-	for(i=0; i<t2.len; i++)
+	for(i=0; i<t2->len; i++)
 	{
-		tab.data[t1.len+i] = t2.data[i];
+		tab->data[t1->len+i] = t2->data[i];
 	}
 
 	return tab;
@@ -132,7 +161,7 @@ int intarray_get_min(intarray tab)
 {
 	int index_min = intarray_get_index_of_min(tab);
 
-	return tab.data[index_min];
+	return tab->data[index_min];
 }
 
 int intarray_get_index_of_min(intarray tab)
@@ -144,23 +173,23 @@ int intarray_get_index_of_min(intarray tab)
 
 int intarray_get_index_of_min_from(intarray tab, int n)
 {
-	if ((n < 0) || (n >= tab.len))
+	if ((n < 0) || (n >= tab->len))
 	{
 		printf("intarray_get_index_of_min_from : L'index %d est invalide\n", n);
-		printf("Les valeurs valides sont entre 0 et %d\n", tab.len-1);
+		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
 
 		return 0;
 	}
 
 	int i;
-	int min = tab.data[n];
+	int min = tab->data[n];
 	int indexMin = n;
 
-	for(i=n+1; i<tab.len; i++)
+	for(i=n+1; i<tab->len; i++)
 	{
-		if (tab.data[i] < min)
+		if (tab->data[i] < min)
 		{
-			min = tab.data[i];
+			min = tab->data[i];
 			indexMin = i;
 		}
 	}
@@ -172,7 +201,7 @@ int intarray_get_max(intarray tab)
 {
 	int index_max = intarray_get_index_of_max(tab);
 
-	return tab.data[index_max];
+	return tab->data[index_max];
 }
 
 int intarray_get_index_of_max(intarray tab)
@@ -184,23 +213,23 @@ int intarray_get_index_of_max(intarray tab)
 
 int intarray_get_index_of_max_from(intarray tab, int n)
 {
-	if ((n < 0) || (n >= tab.len))
+	if ((n < 0) || (n >= tab->len))
 	{
 		printf("intarray_get_index_of_max_from : L'index %d est invalide\n", n);
-		printf("Les valeurs valides sont entre 0 et %d\n", tab.len-1);
+		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
 
 		return 0;
 	}
 
 	int i;
-	int max = tab.data[n];
+	int max = tab->data[n];
 	int indexMax = n;
 
-	for(i=n+1; i<tab.len; i++)
+	for(i=n+1; i<tab->len; i++)
 	{
-		if (tab.data[i] > max)
+		if (tab->data[i] > max)
 		{
-			max = tab.data[i];
+			max = tab->data[i];
 			indexMax = i;
 		}
 	}
@@ -214,13 +243,11 @@ void intarray_sort1(intarray tab)
 	int indiceMin;
 	int tmp;
 
-	for (i=0; i<tab.len-1; i++)
+	for (i=0; i<tab->len-1; i++)
 	{
 		indiceMin = intarray_get_index_of_min_from(tab, i);
 
-		/* Les 2 lignes suivantes sont équivalentes */
-		//intarray_swap(&(tab.data[i]), &(tab.data[indiceMin]));
-		int_swap(tab.data + i, tab.data + indiceMin);
+		int_swap(tab->data + i, tab->data + indiceMin);
 	}
 }
 
@@ -229,12 +256,12 @@ int intarray_sum(intarray tab)
 	int i;
 	int res = 0;
 
-	if (tab.len <= 0)
+	if (tab->len <= 0)
 		printf("intarray_sum : tableau de longueur négative ou nulle.\n");
 	
-	for (i=0; i<tab.len; i++)
+	for (i=0; i<tab->len; i++)
 	{
-		res += tab.data[i];
+		res += tab->data[i];
 	}
 
 	return res;
@@ -244,15 +271,15 @@ float intarray_average(intarray tab)
 {
 	float res = 0.0;
 
-	if (tab.len <= 0)
+	if (tab->len <= 0)
 	{
 		printf("intarray_average : tableau de longueur négative ou nulle.\n");
 		return -1.0;
 	}
 	
-	if (tab.len > 0)
+	if (tab->len > 0)
 	{
-		res = (float) intarray_sum(tab) / tab.len;
+		res = (float) intarray_sum(tab) / tab->len;
 	}
 	
 	return res;
@@ -260,7 +287,7 @@ float intarray_average(intarray tab)
 
 float intarray_median(intarray tab)
 {
-	if (tab.len <= 0)
+	if (tab->len <= 0)
 	{
 		printf("intarray_average : tableau de longueur négative ou nulle.\n");
 		return -1.0;
@@ -272,14 +299,14 @@ float intarray_median(intarray tab)
 
 	intarray_sort1(copy);
 
-	if (copy.len % 2 > 0)
+	if (copy->len % 2 > 0)
 	{	
-		res = copy.data[((copy.len - 1) / 2)];
+		res = copy->data[((copy->len - 1) / 2)];
 	} else {
-		int indiceInf = (copy.len - 1) / 2;
-		int indiceSup = (copy.len / 2);
+		int indiceInf = (copy->len - 1) / 2;
+		int indiceSup = (copy->len / 2);
 
-		res = (float) (copy.data[indiceInf] + copy.data[indiceSup]) / 2;
+		res = (float) (copy->data[indiceInf] + copy->data[indiceSup]) / 2;
 	}
 
 	intarray_destroy(copy);
@@ -291,9 +318,9 @@ intarray intarray_clone(intarray tab)
 {
 	int i;
 
-	intarray copy = intarray_create(tab.len);
+	intarray copy = intarray_create(tab->len);
 
-	for (i=0; i<tab.len; i++)
+	for (i=0; i<tab->len; i++)
 	{
 		intarray_set(copy, i, intarray_get(tab, i));
 	}
@@ -301,7 +328,7 @@ intarray intarray_clone(intarray tab)
 	return copy;
 }
 
-void unsorted_intarray_delete(intarray* tab, int index)
+void unsorted_intarray_delete(intarray tab, int index)
 {
 	if ((index < 0) || (index >= tab->len))
 	{
@@ -316,7 +343,7 @@ void unsorted_intarray_delete(intarray* tab, int index)
 	tab->len--;
 }
 
-void intarray_delete(intarray* tab, int index)
+void intarray_delete(intarray tab, int index)
 {
 	if ((index < 0) || (index >= tab->len))
 	{
@@ -338,7 +365,7 @@ void intarray_delete(intarray* tab, int index)
 	première version : ne prend pas encore en compte
 	les situations où il faut réallouer data
 */
-void intarray_add(intarray* tab, int value)
+void intarray_add(intarray tab, int value)
 {
 	if (tab->len >= tab->alloc)
 	{
@@ -346,7 +373,7 @@ void intarray_add(intarray* tab, int value)
 		return;
 	}
 
-	tab->data[tab->len - 1] = value;
+	tab->data[tab->len] = value;
 
 	tab->len++;
 }
