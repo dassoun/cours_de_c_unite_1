@@ -392,29 +392,16 @@ void ext_intarray_set(intarray tab, int index, int value)
 	}
 	else
 	{
-		if (index <= (tab->alloc - 1)) 
-		{
-			int i;
-
-			for(i=tab->len; i<index; i++)
-				tab->data[i] = 0;
-			tab->data[index] = value;
-
-			tab->len = index + 1;
-		}
-		else
-		{
+		if (index >= tab->alloc)
 			intarray_resize(tab, (index * 2) + 1);
 
-			int i;
+		int i;
 
-			for (i=tab->len; i<index; i++)
-				tab->data[i] = 0;
-			
-			tab->data[index] = value;
+		for(i=tab->len; i<index; i++)
+			tab->data[i] = 0;
+		tab->data[index] = value;
 
-			tab->len = index + 1;
-		}
+		tab->len = index + 1;
 	}
 }
 
