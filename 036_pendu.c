@@ -6,6 +6,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define CHAR_FOUND 				1
 #define CHAR_ALREADY_TRIED		2
@@ -33,7 +34,7 @@ int display_word(char* word, int* tab_tried)
 				printf("%c", word[i]);
 			else
 			{
-				printf("_");
+				printf("-");
 				nbletterstofind++;
 			}
 		}
@@ -117,6 +118,9 @@ int main(int argc, char* argv[])
 
 	int i;
 
+/*	for (i=0; i<21; i++)
+		printf("\n");*/
+
 	for (i=0; i<26; i++)
 		tab_tried[i] = 0;
 
@@ -136,6 +140,7 @@ int main(int argc, char* argv[])
 	printf("Jeu du Pendu. Vous avez droit à %d essais.\n", nblives);
 
 	try_char(word[0], tab_tried, word);
+	try_char(word[strlen(word) - 1], tab_tried, word);
 
 	letterstofind = display_word(word, tab_tried);
 	printf("\n");
