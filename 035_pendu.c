@@ -118,8 +118,9 @@ int main(int argc, char* argv[])
 
 	int i;
 
-/*	for (i=0; i<21; i++)
-		printf("\n");*/
+	// On vide l'ecran pour masquer le mot saisi
+	for (i=0; i<30; i++)
+		printf("\n");
 
 	for (i=0; i<26; i++)
 		tab_tried[i] = 0;
