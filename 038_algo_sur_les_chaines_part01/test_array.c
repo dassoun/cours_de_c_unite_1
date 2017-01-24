@@ -42,5 +42,14 @@ int main(int argc, char* argv[])
 
 	jstr_destroy(j);
 
+	jstr j1 = regstr_to_jstr("machin bidule");
+	jstr j2 = regstr_to_jstr("ule");
+
+	int res = jstr_equal_substr(j1, 10, 12, j2, 1);
+	printf("%d\n", res);
+
+	jstr_destroy(j1);
+	jstr_destroy(j2);
+
 	return EXIT_SUCCESS;
 }

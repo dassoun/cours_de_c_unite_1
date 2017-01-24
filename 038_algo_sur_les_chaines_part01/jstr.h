@@ -87,4 +87,6 @@ float jstr_average(jstr tab);
 float jstr_median(jstr tab);
 jstr jstr_clone(jstr tab);
 
+int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2);
+
 #endif

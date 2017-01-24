@@ -450,3 +450,33 @@ char* jstr_to_regstr(jstr tab)
 
 	return str;
 }
+
+int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2)
+{
+	printf("e1 - s1 = %d\n", (e1 - s1));
+	printf("j2->len = %d\n", j2->len);
+	printf("s2 = %d\n", s2);
+	if (((e1 - s1) + 1) < (j2->len - s2))
+		return 0;
+
+	int i = s1;
+	int j = s2;
+	int substr_equal = 1;
+	printf("i = %d\n", i);
+	printf("e1 = %d\n", e1);
+	printf("substr_equal = %d\n", substr_equal);
+	while ((i <= e1) && (substr_equal == 1))
+	{
+		printf("j1->data[i] = %c\n", j1->data[i]);
+		printf("j2->data[j] = %c\n", j2->data[j]);
+		if (j1->data[i] != j2->data[j])
+		{
+			substr_equal = 0;
+		}
+
+		i++;
+		j++;
+	}
+
+	return substr_equal;
+}
