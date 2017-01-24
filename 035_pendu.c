@@ -1,6 +1,6 @@
 /*
  * Cours de Jacques-Olivier Lapeyre
- * Cours 36
+ * Cours 35
  * Jeu du pendu - Partie 1
  * https://www.youtube.com/watch?v=QzUU2CXD6qg
  */
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 
 	int i;
 
-	// On vide l'ecran pour masquer le mot saisi
+	// On vide l'ecran pour masquer le mot saisi en ligne de commande
 	for (i=0; i<30; i++)
 		printf("\n");
 
@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 		upper_word(word);
 	}
 	else
-		word = "MACHINBIDULE";
+		word = "EXCEPTIONNELLEMENT";
 
 	if (argc >= 3)
 		nblives = atoi(argv[2]);
