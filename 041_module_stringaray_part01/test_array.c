@@ -14,7 +14,14 @@
 
 int main(int argc, char* argv[])
 {
-	
+	jstr j = regstr_to_jstr("Machin");
+	stringarray sa = standard_empty_stringarray_create();
+
+	stringarray_add(sa, j);
+
+	stringarray_debug(sa);
+
+	stringarray_destroy_using_jstr_destroy(sa);
 
 	return EXIT_SUCCESS;
 }

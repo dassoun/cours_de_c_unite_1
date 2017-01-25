@@ -50,7 +50,7 @@ void stringarray_create_aux(stringarray tab)
 	int i;
 
 	for(i=0; i<tab->alloc; i++)
-		tab->data[i] = null;
+		tab->data[i] = NULL;
 }
 
 void stringarray_destroy(stringarray tab)
@@ -59,7 +59,7 @@ void stringarray_destroy(stringarray tab)
 	free(tab);
 }
 
-void stringarray_destroy_using_jstr_destroy(stringarray tab);
+void stringarray_destroy_using_jstr_destroy(stringarray tab)
 {
 	int i;
 
@@ -69,13 +69,13 @@ void stringarray_destroy_using_jstr_destroy(stringarray tab);
 	stringarray_destroy(tab);
 }
 
-char stringarray_get(stringarray tab, int index)
+jstr stringarray_get(stringarray tab, int index)
 {
 	if ((index < 0) || (index >= tab->len))
 	{
 		printf("stringarray_get : L'index %d est invalide\n", index);
 		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
-		return -1;
+		return NULL;
 	}
 
 	return tab->data[index];
@@ -99,14 +99,14 @@ int stringarray_length(stringarray tab)
 	return tab->len;
 }
 
-int stringarray_search(stringarray tab, char n)
+int stringarray_search(stringarray tab, jstr value)
 {
 	int trouve = 0;
 	int i = 0;
 
 	while (!trouve && i < tab->len)
 	{
-		if (tab->data[i] == n)
+		if (jstr_equal(tab->data[i], value))
 			trouve = 1;
 		i++;
 	}
@@ -114,14 +114,14 @@ int stringarray_search(stringarray tab, char n)
 	return trouve;
 }
 
-int stringarray_nb_occurences(stringarray tab, char n)
+int stringarray_nb_occurences(stringarray tab, jstr value)
 {	
 	int i;
 	int nb = 0;
 
 	for (i=0; i<tab->len; i++)
 	{
-		if (tab->data[i] == n)
+		if (jstr_equal(tab->data[i], value))
 			nb++;
 	}
 
@@ -167,7 +167,7 @@ void D_stringarray_concat(stringarray t1, stringarray t2)
 		stringarray_add(t1, t2->data[i]);
 }
 
-char stringarray_get_min(stringarray tab)
+jstr stringarray_get_min(stringarray tab)
 {
 	int index_min = stringarray_get_index_of_min(tab);
 
@@ -348,7 +348,7 @@ void ext_stringarray_set(stringarray tab, int index, jstr value)
 
 void stringarray_resize(stringarray tab, int newalloc)
 {
-	char* newdata = malloc(sizeof(char) * newalloc);
+	jstr* newdata = malloc(sizeof(jstr) * newalloc);
 
 	int i;
 	for (i=0; i<tab->len; i++)
@@ -358,29 +358,6 @@ void stringarray_resize(stringarray tab, int newalloc)
 
 	tab->data = newdata;
 	tab->alloc = newalloc;
-}
-
-stringarray regstr_to_stringarray(regstr str)
-{
-	int i;
-	
-	stringarray tab = standard_empty_stringarray_create();
-	for (i=0; str[i]!='\0'; i++)
-		stringarray_add(tab, str[i]);
-
-	return tab;
-}
-
-char* stringarray_to_regstr(stringarray tab)
-{
-	char* str = malloc(sizeof(char) * (tab->len + 1));
-	int i;
-
-	for (i=0; i<tab->len; i++)
-		str[i] = tab->data[i];
-	str[tab->len] = '\0';
-
-	return str;
 }
 
 int stringarray_equal_substr(stringarray j1, int s1, int e1, stringarray j2, int s2)

@@ -25,7 +25,7 @@ void stringarray_destroy(stringarray tab);
 /* Désaloue les jstr de tab en plus de la struct et du tableau de jstr */
 void stringarray_destroy_using_jstr_destroy(stringarray tab);
 
-char stringarray_get(stringarray tab, int index);
+jstr stringarray_get(stringarray tab, int index);
 /* Pour les tableaux de taille max fixe seulement */
 void stringarray_set(stringarray tab, int index, jstr value);
 /* Comme stringarray_set, mais modifie la taille si nécessaire */
@@ -70,7 +70,7 @@ stringarray stringarray_concat(stringarray t1, stringarray t2);
 void D_stringarray_concat(stringarray t1, stringarray t2);
 
 /* retourne la plus petite valeur contenue dans tab */
-char stringarray_get_min(stringarray tab);
+jstr stringarray_get_min(stringarray tab);
 /* retourne l'index de la plus petite valeur contenue dans tab */
 int stringarray_get_index_of_min(stringarray tab);
 /*
