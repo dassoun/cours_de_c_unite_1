@@ -1,8 +1,8 @@
 /*
  * Cours de Jacques-Olivier Lapeyre
- * Cours 38
- * Algorithmique sur des chaines
- * https://www.youtube.com/watch?v=o75Hs0bg5jM
+ * Cours 39
+ * Correction du cours 38
+ * https://www.youtube.com/watch?v=07eX8dLodQs
  */
 #include <stdio.h>
 #include <stdlib.h>
