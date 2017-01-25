@@ -453,22 +453,17 @@ char* jstr_to_regstr(jstr tab)
 
 int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2)
 {
-	printf("e1 - s1 = %d\n", (e1 - s1));
-	printf("j2->len = %d\n", j2->len);
-	printf("s2 = %d\n", s2);
+	if (e1 < s1)
+		return 0;
+
 	if (((e1 - s1) + 1) < (j2->len - s2))
 		return 0;
 
 	int i = s1;
 	int j = s2;
 	int substr_equal = 1;
-	printf("i = %d\n", i);
-	printf("e1 = %d\n", e1);
-	printf("substr_equal = %d\n", substr_equal);
 	while ((i <= e1) && (substr_equal == 1))
 	{
-		printf("j1->data[i] = %c\n", j1->data[i]);
-		printf("j2->data[j] = %c\n", j2->data[j]);
 		if (j1->data[i] != j2->data[j])
 		{
 			substr_equal = 0;
@@ -479,4 +474,59 @@ int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2)
 	}
 
 	return substr_equal;
+}
+
+int jstr_equal(jstr j1, jstr j2)
+{
+	return jstr_equal_substr(j1, 0, (j1->len - 1), j2, 0);
+}
+
+intarray jstr_find_substr_indices(jstr j, jstr sub)
+{
+	intarray tab = standard_empty_intarray_create();
+	int i;
+
+	for (i=0; i<=(j->len - sub->len); i++)
+	{
+		if (jstr_equal_substr(j, i, ((i + sub->len) - 1), sub, 0))
+			intarray_add(tab, i);
+	}
+
+	return tab;
+}
+
+intarray jstr_find_proper_substr_indices(jstr j, jstr sub)
+{
+	intarray tab = standard_empty_intarray_create();
+	int i = 0;
+
+	while (i <= (j->len - sub->len))
+	{
+		if (jstr_equal_substr(j, i, ((i + sub->len) - 1), sub, 0))
+		{
+			intarray_add(tab, i);
+			i += sub->len;
+		}
+		else
+			i++;
+	}
+
+	return tab;
+}
+
+int jstr_compare(jstr j1, jstr j2)
+{
+	int i = 0;
+
+	while ((j1->data[i] == j2->data[i]) && (i<(j1->len)) && (i<(j2->len)))
+		i++;
+
+	if ((i == (j1->len)) && (i == (j2->len)))
+		return 0;
+
+	if ((i == (j1->len)) || (j1->data[i] < j2->data[i]))
+		return -1;
+
+	if ((i == (j2->len)) || (j1->data[i] > j2->data[i]))
+		return 1;
 }

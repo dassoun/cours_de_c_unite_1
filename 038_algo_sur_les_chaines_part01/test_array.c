@@ -42,11 +42,72 @@ int main(int argc, char* argv[])
 
 	jstr_destroy(j);
 
+	/*
+		Exercice 1 :
+		------------
+	*/
 	jstr j1 = regstr_to_jstr("machin bidule");
 	jstr j2 = regstr_to_jstr("ule");
 
-	int res = jstr_equal_substr(j1, 10, 12, j2, 1);
+	int res = jstr_equal_substr(j1, 10, 12, j2, 0);
 	printf("%d\n", res);
+
+	jstr_destroy(j1);
+	jstr_destroy(j2);
+
+	/*
+		Exercice 2 :
+		------------
+	*/
+	j1 = regstr_to_jstr("machin");
+	j2 = regstr_to_jstr("machin");
+
+	res = jstr_equal(j1, j2);
+	printf("%d\n", res);
+
+	jstr_destroy(j1);
+	jstr_destroy(j2);
+
+	/*
+		Exercice 3 :
+		------------
+	*/
+	j1 = regstr_to_jstr("totototon");
+	j2 = regstr_to_jstr("toto");
+
+	intarray tab = jstr_find_substr_indices(j1, j2);
+	intarray_debug(tab);
+	printf("\n");
+
+	jstr_destroy(j1);
+	jstr_destroy(j2);
+	intarray_destroy(tab);
+
+	/*
+		Exercice 4 :
+		------------
+	*/
+	j1 = regstr_to_jstr("totototon");
+	j2 = regstr_to_jstr("toto");
+
+	tab = jstr_find_proper_substr_indices(j1, j2);
+	intarray_debug(tab);
+	printf("\n");
+
+	jstr_destroy(j1);
+	jstr_destroy(j2);
+	intarray_destroy(tab);
+
+	/*
+		Exercice 5 :
+		------------
+	*/
+	j1 = regstr_to_jstr("toto");
+	j2 = regstr_to_jstr("toto");
+
+	res = jstr_compare(j1, j2);
+
+	printf("jstr_compare %s / %s = %d\n", j1->data, j2->data, res);
 
 	jstr_destroy(j1);
 	jstr_destroy(j2);

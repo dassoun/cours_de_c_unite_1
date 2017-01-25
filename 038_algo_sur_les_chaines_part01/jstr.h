@@ -88,5 +88,9 @@ float jstr_median(jstr tab);
 jstr jstr_clone(jstr tab);
 
 int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2);
+int jstr_equal(jstr j1, jstr j2);
+intarray jstr_find_substr_indices(jstr j, jstr sub);
+intarray jstr_find_proper_substr_indices(jstr j, jstr sub);
+int jstr_compare(jstr j1, jstr j2);
 
 #endif
