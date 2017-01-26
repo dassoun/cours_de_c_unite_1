@@ -79,7 +79,7 @@ int stringarray_get_index_of_min(stringarray tab);
 */
 int stringarray_get_index_of_min_from(stringarray tab, int n);
 /* retourne la plus grande valeur contenue dans tab */
-char stringarray_get_max(stringarray tab);
+jstr stringarray_get_max(stringarray tab);
 /* retourne l'index de la plus grande valeur contenue dans tab */
 int stringarray_get_index_of_max(stringarray tab);
 /*

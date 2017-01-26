@@ -93,4 +93,6 @@ intarray jstr_find_substr_indices(jstr j, jstr sub);
 intarray jstr_find_proper_substr_indices(jstr j, jstr sub);
 int jstr_compare(jstr j1, jstr j2);
 
+void jstr_swap(jstr j1, jstr j2);
+
 #endif

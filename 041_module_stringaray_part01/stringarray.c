@@ -132,7 +132,10 @@ void stringarray_debug(stringarray tab)
 {
 	int i;
 	for (i=0; i<=tab->len-1; i++)
+	{
 		jstr_debug(tab->data[i]);
+		printf("\n");
+	}
 }
 
 void ext_stringarray_debug(stringarray tab)
@@ -192,12 +195,12 @@ int stringarray_get_index_of_min_from(stringarray tab, int n)
 	}
 
 	int i;
-	char min = tab->data[n];
+	jstr min = tab->data[n];
 	int indexMin = n;
 
 	for(i=n+1; i<tab->len; i++)
 	{
-		if (tab->data[i] < min)
+		if (jstr_compare(tab->data[i], min) == -1)
 		{
 			min = tab->data[i];
 			indexMin = i;
@@ -207,7 +210,7 @@ int stringarray_get_index_of_min_from(stringarray tab, int n)
 	return indexMin;
 }
 
-char stringarray_get_max(stringarray tab)
+jstr stringarray_get_max(stringarray tab)
 {
 	int index_max = stringarray_get_index_of_max(tab);
 
@@ -232,12 +235,12 @@ int stringarray_get_index_of_max_from(stringarray tab, int n)
 	}
 
 	int i;
-	char max = tab->data[n];
+	jstr max = tab->data[n];
 	int indexMax = n;
 
 	for(i=n+1; i<tab->len; i++)
 	{
-		if (tab->data[i] > max)
+		if (jstr_compare(tab->data[i], max) == 1)
 		{
 			max = tab->data[i];
 			indexMax = i;
@@ -257,7 +260,7 @@ void stringarray_sort1(stringarray tab)
 	{
 		indiceMin = stringarray_get_index_of_min_from(tab, i);
 
-		char_swap(tab->data + i, tab->data + indiceMin);
+		jstr_swap(tab->data[i], tab->data[indiceMin]);
 	}
 }
 

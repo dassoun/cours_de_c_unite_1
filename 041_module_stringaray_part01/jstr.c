@@ -525,6 +525,11 @@ intarray jstr_find_proper_substr_indices(jstr j, jstr sub)
 	return tab;
 }
 
+/*
+	Retourne 1 si j1 > j2
+	Retourne 0 si j1 = j2
+	Retourne -1 si j1 < j2
+*/
 int jstr_compare(jstr j1, jstr j2)
 {
 	int i = 0;
@@ -540,4 +545,11 @@ int jstr_compare(jstr j1, jstr j2)
 
 	if ((i == (j2->len)) || (j1->data[i] > j2->data[i]))
 		return 1;
+}
+
+void jstr_swap(jstr j1, jstr j2)
+{
+	jstr tmp = j1;
+	j1 = j2;
+	j2 = tmp;
 }

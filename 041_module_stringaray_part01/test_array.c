@@ -14,12 +14,43 @@
 
 int main(int argc, char* argv[])
 {
-	jstr j = regstr_to_jstr("Machin");
+	jstr j1 = regstr_to_jstr("machin");
+	jstr j2 = regstr_to_jstr("aaa");
+	jstr j3 = regstr_to_jstr("truc");
+
 	stringarray sa = standard_empty_stringarray_create();
 
-	stringarray_add(sa, j);
+	stringarray_add(sa, j1);
+	stringarray_add(sa, j2);
+	stringarray_add(sa, j3);
 
-	stringarray_debug(sa);
+	ext_stringarray_debug(sa);
+	printf("\n");
+
+	stringarray_sort1(sa);
+
+	ext_stringarray_debug(sa);
+	printf("\n");
+
+	ext_jstr_debug(j1);
+	printf("\n");
+	ext_jstr_debug(j2);
+	printf("\n");
+
+	jstr_swap(j1, j2);	
+
+	ext_jstr_debug(j1);
+	printf("\n");
+	ext_jstr_debug(j2);
+	printf("\n");	
+
+
+	jstr_swap(sa->data[0], sa->data[1]);
+
+
+	ext_stringarray_debug(sa);
+	printf("\n");
+
 
 	stringarray_destroy_using_jstr_destroy(sa);
 
