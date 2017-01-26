@@ -1,5 +1,4 @@
-# cours_de_c_unite_1
-Cours de C
+# cours de C de Jacques-Olivier Lapeyre
+# Unité 1
 
-Cours youtube de Jacques-Olivier Lapeyre
 http://www.multiparadigme.org/
