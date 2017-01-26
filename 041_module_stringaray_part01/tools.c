@@ -64,3 +64,34 @@ void char_swap(char* n, char* m)
 	*m = *n;
 	*n = tmp;
 }
+
+void tools_memory_init(void)
+{
+	GLOBAL_ALLOC_MEMORY = 0;
+}
+
+void* tools_malloc(int alloc)
+{
+	void* ptr = malloc(alloc);
+
+	GLOBAL_ALLOC_MEMORY += alloc;
+	
+	return ptr;
+}
+
+void tools_free(void* ptr, int alloc)
+{
+	free(ptr);
+
+	GLOBAL_ALLOC_MEMORY -= alloc;
+}
+
+void tools_memory_check_at_end_of_app(void)
+{
+	if (GLOBAL_ALLOC_MEMORY != 0)
+	{
+		printf("Attention !\n");
+		printf("Ce programme a une ou des fuites mémoire.\n");
+		printf("%d octets n'ont pas été libérés.\n", GLOBAL_ALLOC_MEMORY);
+	}
+}

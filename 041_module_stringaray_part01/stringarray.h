@@ -54,9 +54,12 @@ int stringarray_length(stringarray tab);
 int stringarray_search(stringarray tab, jstr value);
 int stringarray_nb_occurences(stringarray tab, jstr value);
 
+void stringarray_debug_with_delimiter(stringarray tab, char* delimiter);
 void stringarray_debug(stringarray tab);
 void ext_stringarray_debug(stringarray tab);
 
+stringarray stringarray_concat_using_jstr_clone(stringarray t1, stringarray t2);
+stringarray stringarray_concat_aux(stringarray t1, stringarray t2, int clone);
 /* 
 	retourne le résultat de la concaténation de t1 et t2 
 	les jstr de t1 et t2 sont clonées
@@ -90,13 +93,10 @@ int stringarray_get_index_of_max_from(stringarray tab, int n);
 /* Tri par sélection du minimum */
 void stringarray_sort1(stringarray tab);
 
+stringarray stringarray_clone_aux(stringarray tab, int clone);
 stringarray stringarray_clone(stringarray tab);
 stringarray stringarray_clone_using_jstr_clone(stringarray tab);
 
-int stringarray_equal_substr(stringarray j1, int s1, int e1, stringarray j2, int s2);
 int stringarray_equal(stringarray j1, stringarray j2);
-intarray stringarray_find_substr_indices(stringarray j, stringarray sub);
-intarray stringarray_find_proper_substr_indices(stringarray j, stringarray sub);
-int stringarray_compare(stringarray j1, stringarray j2);
 
 #endif

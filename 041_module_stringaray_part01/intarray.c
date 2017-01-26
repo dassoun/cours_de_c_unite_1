@@ -7,7 +7,7 @@
 /* Corps des fonctions manipulant des intarray */
 intarray intarray_create(int len)
 {
-	intarray tab = malloc(sizeof(S_intarray));
+	intarray tab = tools_malloc(sizeof(S_intarray));
 	
 	tab->len = len;
 	tab->alloc = len;
@@ -19,7 +19,7 @@ intarray intarray_create(int len)
 
 intarray empty_intarray_create(int alloc)
 {
-	intarray tab = malloc(sizeof(S_intarray));
+	intarray tab = tools_malloc(sizeof(S_intarray));
 
 	tab->len = 0;
 	tab->alloc = alloc;
@@ -44,7 +44,7 @@ void intarray_create_aux(intarray tab)
 		printf("Nous allouons %d à la place.\n", tab->alloc);
 	}
 	
-	tab->data = malloc(tab->alloc * sizeof(int));
+	tab->data = tools_malloc(tab->alloc * sizeof(int));
 
 	int i;
 
@@ -54,8 +54,8 @@ void intarray_create_aux(intarray tab)
 
 void intarray_destroy(intarray tab)
 {
-	free(tab->data);
-	free(tab);
+	tools_free(tab->data, sizeof(int) * tab->alloc);
+	tools_free(tab, sizeof(S_intarray));
 }
 
 int intarray_get(intarray tab, int index)
@@ -412,13 +412,13 @@ void ext_intarray_set(intarray tab, int index, int value)
 
 void intarray_resize(intarray tab, int newalloc)
 {
-	int* newdata = malloc(sizeof(int) * newalloc);
+	int* newdata = tools_malloc(sizeof(int) * newalloc);
 
 	int i;
 	for (i=0; i<tab->len; i++)
 		newdata[i] = tab->data[i];
 
-	free(tab->data);
+	tools_free(tab->data, sizeof(int) * tab->alloc);
 
 	tab->data = newdata;
 	tab->alloc = newalloc;

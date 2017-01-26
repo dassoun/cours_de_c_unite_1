@@ -8,7 +8,7 @@
 /* Corps des fonctions manipulant des jstr */
 jstr jstr_create(int len)
 {
-	jstr tab = malloc(sizeof(S_jstr));
+	jstr tab = tools_malloc(sizeof(S_jstr));
 	
 	tab->len = len;
 	tab->alloc = len;
@@ -20,7 +20,7 @@ jstr jstr_create(int len)
 
 jstr empty_jstr_create(int alloc)
 {
-	jstr tab = malloc(sizeof(S_jstr));
+	jstr tab = tools_malloc(sizeof(S_jstr));
 
 	tab->len = 0;
 	tab->alloc = alloc;
@@ -45,7 +45,7 @@ void jstr_create_aux(jstr tab)
 		printf("Nous allouons %d à la place.\n", tab->alloc);
 	}
 	
-	tab->data = malloc(tab->alloc * sizeof(char));
+	tab->data = tools_malloc(tab->alloc * sizeof(char));
 
 	int i;
 
@@ -55,8 +55,8 @@ void jstr_create_aux(jstr tab)
 
 void jstr_destroy(jstr tab)
 {
-	free(tab->data);
-	free(tab);
+	tools_free(tab->data, sizeof(char) * tab->alloc);
+	tools_free(tab, sizeof(S_jstr));
 }
 
 char jstr_get(jstr tab, int index)
@@ -416,13 +416,13 @@ void ext_jstr_set(jstr tab, int index, char value)
 
 void jstr_resize(jstr tab, int newalloc)
 {
-	char* newdata = malloc(sizeof(char) * newalloc);
+	char* newdata = tools_malloc(sizeof(char) * newalloc);
 
 	int i;
 	for (i=0; i<tab->len; i++)
 		newdata[i] = tab->data[i];
 
-	free(tab->data);
+	tools_free(tab->data, sizeof(char) * tab->alloc);
 
 	tab->data = newdata;
 	tab->alloc = newalloc;
@@ -441,7 +441,7 @@ jstr regstr_to_jstr(regstr str)
 
 char* jstr_to_regstr(jstr tab)
 {
-	char* str = malloc(sizeof(char) * (tab->len + 1));
+	char* str = tools_malloc(sizeof(char) * (tab->len + 1));
 	int i;
 
 	for (i=0; i<tab->len; i++)
@@ -486,7 +486,9 @@ int jstr_equal_substr(jstr j1, int s1, int e1, jstr j2, int s2)
 
 int jstr_equal(jstr j1, jstr j2)
 {
-	if (j1->len != j2->len)
+	if (j1 == j2)
+		return 1;
+	else if (j1->len != j2->len)
 		return 0;
 
 	return jstr_equal_substr(j1, 0, (j1->len - 1), j2, 0);

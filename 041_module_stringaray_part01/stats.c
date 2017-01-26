@@ -6,6 +6,8 @@
 
 int main(int argc, char* argv[])
 {
+	tools_memory_init();
+
 	intarray tab = empty_intarray_create(argc - 1);
 	int i;
 
@@ -46,6 +48,8 @@ int main(int argc, char* argv[])
 	printf("Médiane = %f\n", intarray_median(tab));
 
 	intarray_destroy(tab);
+
+	tools_memory_check_at_end_of_app();
 
 	return EXIT_SUCCESS;
 }

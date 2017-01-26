@@ -8,7 +8,7 @@
 /* Corps des fonctions manipulant des stringarray */
 stringarray stringarray_create(int len)
 {
-	stringarray tab = malloc(sizeof(S_stringarray));
+	stringarray tab = tools_malloc(sizeof(S_stringarray));
 	
 	tab->len = len;
 	tab->alloc = len;
@@ -20,7 +20,7 @@ stringarray stringarray_create(int len)
 
 stringarray empty_stringarray_create(int alloc)
 {
-	stringarray tab = malloc(sizeof(S_stringarray));
+	stringarray tab = tools_malloc(sizeof(S_stringarray));
 
 	tab->len = 0;
 	tab->alloc = alloc;
@@ -45,7 +45,7 @@ void stringarray_create_aux(stringarray tab)
 		printf("Nous allouons %d à la place.\n", tab->alloc);
 	}
 	
-	tab->data = malloc(tab->alloc * sizeof(jstr));
+	tab->data = tools_malloc(tab->alloc * sizeof(jstr));
 
 	int i;
 
@@ -55,8 +55,8 @@ void stringarray_create_aux(stringarray tab)
 
 void stringarray_destroy(stringarray tab)
 {
-	free(tab->data);
-	free(tab);
+	tools_free(tab->data, sizeof(jstr) * tab->alloc);
+	tools_free(tab, sizeof(S_stringarray));
 }
 
 void stringarray_destroy_using_jstr_destroy(stringarray tab)
@@ -75,6 +75,7 @@ jstr stringarray_get(stringarray tab, int index)
 	{
 		printf("stringarray_get : L'index %d est invalide\n", index);
 		printf("Les valeurs valides sont entre 0 et %d\n", tab->len-1);
+
 		return NULL;
 	}
 
@@ -90,6 +91,9 @@ void stringarray_set(stringarray tab, int index, jstr value)
 
 		return;
 	}
+
+	if (tab->data[index] != NULL)
+			jstr_destroy(tab->data[index]);
 
 	tab->data[index] = value;
 }
@@ -128,14 +132,19 @@ int stringarray_nb_occurences(stringarray tab, jstr value)
 	return nb;
 }
 
-void stringarray_debug(stringarray tab)
+void stringarray_debug_with_delimiter(stringarray tab, char* delimiter)
 {
 	int i;
 	for (i=0; i<=tab->len-1; i++)
 	{
 		jstr_debug(tab->data[i]);
-		printf("\n");
+		printf(delimiter);
 	}
+}
+
+void stringarray_debug(stringarray tab)
+{
+	stringarray_debug_with_delimiter(tab, "\n");
 }
 
 void ext_stringarray_debug(stringarray tab)
@@ -146,6 +155,16 @@ void ext_stringarray_debug(stringarray tab)
 
 stringarray stringarray_concat(stringarray t1, stringarray t2)
 {
+	return stringarray_concat_aux(t1, t2, 0);
+}
+
+stringarray stringarray_concat_using_jstr_clone(stringarray t1, stringarray t2)
+{
+	return stringarray_concat_aux(t1, t2, 1);
+}
+
+stringarray stringarray_concat_aux(stringarray t1, stringarray t2, int clone)
+{
 	int n = t1->len + t2->len;
 
 	stringarray tab = stringarray_create(n);
@@ -153,21 +172,31 @@ stringarray stringarray_concat(stringarray t1, stringarray t2)
 	int i;
 	for(i=0; i<t1->len; i++)
 	{
-		tab->data[i] = t1->data[i];
+		if (clone)
+			tab->data[i] = jstr_clone(t1->data[i]);
+		else 
+			tab->data[i] = t1->data[i];
 	}
 	for(i=0; i<t2->len; i++)
 	{
-		tab->data[t1->len+i] = t2->data[i];
+		if (clone)
+			tab->data[t1->len+i] = jstr_clone(t2->data[i]);
+		else
+			tab->data[t1->len+i] = t2->data[i];
 	}
 
 	return tab;
 }
-
+/*
+	Ajoute à la fin de t1 des clones des jstr de t2,
+	en respectant l'ordre de ces derniers.
+	Le contenu de t2 n'est pas modifié.
+*/
 void D_stringarray_concat(stringarray t1, stringarray t2)
 {
 	int i;
 	for (i=0; i<t2->len; i++)
-		stringarray_add(t1, t2->data[i]);
+		stringarray_add(t1, jstr_clone(t2->data[i]));
 }
 
 jstr stringarray_get_min(stringarray tab)
@@ -260,11 +289,13 @@ void stringarray_sort1(stringarray tab)
 	{
 		indiceMin = stringarray_get_index_of_min_from(tab, i);
 
-		jstr_swap(tab->data[i], tab->data[indiceMin]);
+		jstr tmp = tab->data[i];
+		tab->data[i] = tab->data[indiceMin];
+		tab->data[indiceMin] = tmp;
 	}
 }
 
-stringarray stringarray_clone(stringarray tab)
+stringarray stringarray_clone_aux(stringarray tab, int clone)
 {
 	int i;
 
@@ -272,10 +303,23 @@ stringarray stringarray_clone(stringarray tab)
 
 	for (i=0; i<tab->len; i++)
 	{
-		stringarray_set(copy, i, stringarray_get(tab, i));
+		if (clone)
+			stringarray_set(copy, i, jstr_clone(tab->data[i]));
+		else
+			stringarray_set(copy, i, stringarray_get(tab, i));
 	}
 
 	return copy;
+}
+
+stringarray stringarray_clone(stringarray tab)
+{
+	return stringarray_clone_aux(tab, 0);
+}
+
+stringarray stringarray_clone_using_jstr_clone(stringarray tab)
+{
+	return stringarray_clone_aux(tab, 1);
 }
 
 void unsorted_stringarray_delete(stringarray tab, int index)
@@ -288,6 +332,8 @@ void unsorted_stringarray_delete(stringarray tab, int index)
 		return;
 	}
 
+	jstr_destroy(tab->data[index]);
+
 	tab->data[index] = tab->data[tab->len - 1];
 
 	tab->len--;
@@ -295,6 +341,8 @@ void unsorted_stringarray_delete(stringarray tab, int index)
 
 void stringarray_delete(stringarray tab, int index)
 {
+	int i;
+
 	if ((index < 0) || (index >= tab->len))
 	{
 		printf("stringarray_delete : L'index %d est invalide\n", index);
@@ -303,7 +351,7 @@ void stringarray_delete(stringarray tab, int index)
 		return;
 	}
 
-	int i;
+	jstr_destroy(tab->data[index]);
 
 	for (i=index+1; i<tab->len; i++)
 		tab->data[i-1] = tab->data[i];
@@ -342,7 +390,11 @@ void ext_stringarray_set(stringarray tab, int index, jstr value)
 		int i;
 
 		for(i=tab->len; i<index; i++)
-			tab->data[i] = 0;
+			tab->data[i] = empty_jstr_create(1);
+
+		if (tab->data[index] != NULL)
+			jstr_destroy(tab->data[index]);
+
 		tab->data[index] = value;
 
 		tab->len = index + 1;
@@ -351,49 +403,16 @@ void ext_stringarray_set(stringarray tab, int index, jstr value)
 
 void stringarray_resize(stringarray tab, int newalloc)
 {
-	jstr* newdata = malloc(sizeof(jstr) * newalloc);
+	jstr* newdata = tools_malloc(sizeof(jstr) * newalloc);
 
 	int i;
 	for (i=0; i<tab->len; i++)
 		newdata[i] = tab->data[i];
 
-	free(tab->data);
+	tools_free(tab->data, sizeof(jstr) * tab->alloc);
 
 	tab->data = newdata;
 	tab->alloc = newalloc;
-}
-
-int stringarray_equal_substr(stringarray j1, int s1, int e1, stringarray j2, int s2)
-{
-	int len = e1 - s1 + 1;
-	int e2 = s2 + len - 1;
-
-	if (s1 > e1)
-	{
-		int_swap(&s1, &e1);
-		printf("stringarray_equal_substr : s1 était supérieur à e1. Les deux ont été échangés.\n");
-	}
-
-	if ((s1 < 0) || (s2 < 0) || (s1 >= j1->len) || (e1 >= j1->len) || (s2 >= j2->len))
-	{
-		printf("stringarray_equal_substr : out of bounds. s1 = %d; e1 = %d;\n", s1, e2);
-		printf("s2 = %d; j1->len = %d; j2->len = %d\n", s2, j1->len, j2->len);
-
-		return 0;
-	}
-
-	if (e2 >= j2->len)
-		return 0;
-
-	int i;
-
-	for (i=0; i<len; i++)
-	{
-		if (j1->data[i + s1] != j2->data[i + s2])
-			return 0;
-	}
-
-	return 1;
 }
 
 int stringarray_equal(stringarray j1, stringarray j2)
@@ -401,55 +420,13 @@ int stringarray_equal(stringarray j1, stringarray j2)
 	if (j1->len != j2->len)
 		return 0;
 
-	return stringarray_equal_substr(j1, 0, (j1->len - 1), j2, 0);
-}
-
-intarray stringarray_find_substr_indices(stringarray j, stringarray sub)
-{
-	intarray tab = standard_empty_intarray_create();
 	int i;
 
-	for (i=0; i<=(j->len - sub->len); i++)
+	for (i=0; i<j1->len; i++)
 	{
-		if (stringarray_equal_substr(j, i, ((i + sub->len) - 1), sub, 0))
-			intarray_add(tab, i);
+		if (!(jstr_equal(j1->data[i], j2->data[i])))
+			return 0;
 	}
 
-	return tab;
-}
-
-intarray stringarray_find_proper_substr_indices(stringarray j, stringarray sub)
-{
-	intarray tab = standard_empty_intarray_create();
-	int i = 0;
-
-	while (i <= (j->len - sub->len))
-	{
-		if (stringarray_equal_substr(j, i, ((i + sub->len) - 1), sub, 0))
-		{
-			intarray_add(tab, i);
-			i += sub->len;
-		}
-		else
-			i++;
-	}
-
-	return tab;
-}
-
-int stringarray_compare(stringarray j1, stringarray j2)
-{
-	int i = 0;
-
-	while ((j1->data[i] == j2->data[i]) && (i<(j1->len)) && (i<(j2->len)))
-		i++;
-
-	if ((i == (j1->len)) && (i == (j2->len)))
-		return 0;
-
-	if ((i == (j1->len)) || (j1->data[i] < j2->data[i]))
-		return -1;
-
-	if ((i == (j2->len)) || (j1->data[i] > j2->data[i]))
-		return 1;
+	return 1;
 }
